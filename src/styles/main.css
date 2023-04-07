@@ -1,0 +1,14 @@
+
+
+.MainPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100%;
+  margin: 0;
+  background-image: linear-gradient(to right, #6d7cb3, #4d91b6, #0e77a6);
+
+}
+  

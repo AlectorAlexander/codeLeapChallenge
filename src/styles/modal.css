@@ -1,0 +1,45 @@
+.modal-header, .modal-body {
+    display: flex;
+    justify-content: center;
+}
+
+.modal-body, .modal-body div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-body {
+    background-color: #c5e4ef74;
+  }
+
+.modal-body * {
+    margin: 0 4px;
+}
+.modal-header {
+    font-family: 'Roboto';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.modal-body button {
+    background-color: white;
+    border: 1px solid rgba(93, 91, 91, 0.26);
+    color: black;
+  }
+  
+  .modal-body button:hover {
+    background-image: linear-gradient(to right, #6d7cb3, #3e7b97);
+    font-weight: bolder;
+    color: white;
+    transition: all 0.2s ease;
+  }
+  
+  
+
+.modal-content {
+    box-shadow: 10px 10px 5px rgba(13, 9, 80, 0.386);
+}
+
