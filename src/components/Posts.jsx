@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, Button, Container, Form } from 'react-bootstrap';
 import '../styles/post.css';
-import { edit_post } from '../redux/actions';
+import { delete_post, edit_post } from '../redux/actions';
+import DeleteModal from './DeletePost';
 
 const Posts = ({ p }) => {
 	const [edit, setEdit] = useState(false);
+	const [ShowDelete, setShowDelete] = useState(false);
 	const [Title, setTitle] = useState('');
 	const [warning, setWarning] = useState('');
 	const [isDisabled, setIsDisabled] = useState(true);
@@ -26,6 +28,11 @@ const Posts = ({ p }) => {
 			postId: p.postId,
 		};
 		dispatch(edit_post(post));
+		setEdit(false);
+	};
+
+	const deletePost = () => {
+		dispatch(delete_post(p.postId ));
 		setEdit(false);
 	};
 
@@ -73,11 +80,11 @@ const Posts = ({ p }) => {
 					Title:
 					<div className='d-flex flex-row justify-content-center'>
 						
-						<Button onClick={() => setEdit(!edit)} className="mt-1 modal-button" variant="danger">
-            Cancelar 
+						<Button onClick={() => setEdit(!edit)} className="m-1 modal-button" variant="danger">
+            Cancel 
 						</Button>
-						<Button onClick={editPost} className="mt-1 modal-button" disabled={isDisabled} variant="primary">
-            Editar
+						<Button onClick={editPost} className="m-1 modal-button" disabled={isDisabled} variant="success">
+            Save
 						</Button>
 						
 					</div>
@@ -103,17 +110,18 @@ const Posts = ({ p }) => {
 			</Form.Group>
 		) : (
 			<Container className='card_post'>
+				<DeleteModal show={ShowDelete} setShow={setShowDelete} deletePost={deletePost} />
 				<Row key={p.postId} className="mb-4">
 					<div className='post_header d-flex flex-row'>
 						<p>
 							{username}
 						</p>
 						<div className='button_posts d-flex flex-row'>
-							<Button variant='danger'>
-              Deletar
+							<Button className='mx-1' variant='danger' onClick={() => setShowDelete(!ShowDelete)}>
+              Delete
 							</Button>
-							<Button onClick={() => setEdit(!edit)}>
-              Editar
+							<Button className='mx-1' onClick={() => setEdit(!edit)}>
+              Edit
 							</Button>
 						</div>
 					</div>
