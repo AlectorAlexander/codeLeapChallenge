@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, Button, Container, Form } from 'react-bootstrap';
 import '../styles/post.css';
 import { delete_post, edit_post } from '../redux/actions';
+import moment from 'moment';
 import DeleteModal from './DeletePost';
 
 const Posts = ({ p }) => {
@@ -21,7 +22,13 @@ const Posts = ({ p }) => {
 		setPost(p.Post);
 	}, []);
 
-	const editPost = () => {
+	function getTimeAgo() {
+		const date = new Date();
+		const timeAgo = moment(date).fromNow();
+		return timeAgo;
+	}
+
+	function editPost() {
 		const post = {
 			Title,
 			Post,
@@ -29,7 +36,7 @@ const Posts = ({ p }) => {
 		};
 		dispatch(edit_post(post));
 		setEdit(false);
-	};
+	}
 
 	const deletePost = () => {
 		dispatch(delete_post(p.postId ));
@@ -113,10 +120,15 @@ const Posts = ({ p }) => {
 				<DeleteModal show={ShowDelete} setShow={setShowDelete} deletePost={deletePost} />
 				<Row key={p.postId} className="mb-4">
 					<div className='post_header d-flex flex-row'>
-						<p>
-							{username}
-						</p>
+						<div>
+							<p>
+								{username}
+							</p>
+							<small>Posted {getTimeAgo()}</small>
+						</div>
+						
 						<div className='button_posts d-flex flex-row'>
+
 							<Button className='mx-1' variant='danger' onClick={() => setShowDelete(!ShowDelete)}>
               Delete
 							</Button>
@@ -125,11 +137,13 @@ const Posts = ({ p }) => {
 							</Button>
 						</div>
 					</div>
+
 					<Col className='linhas'>
 						<h3>{p.Title}</h3>
-						<p>{p.Post}</p>
+						<div className='mb-5' style={{ whiteSpace: 'pre-wrap' }}>{p.Post}</div>
 					</Col>
 				</Row>
+
 			</Container>
 		);
 	};
