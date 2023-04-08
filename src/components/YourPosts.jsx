@@ -13,12 +13,9 @@ function YourPosts() {
 	const [warning, setWarning] = useState('');
 	const [Action, setAction] = useState('create');
 	const [isDisabled, setIsDisabled] = useState(true);
-
 	const posts = useSelector(({userReducer}) => userReducer.post);
 
-	useEffect(() => {
-		console.log(posts);
-	}, [posts]);
+
 
 
 	const dispatch = useDispatch();
@@ -106,38 +103,42 @@ function YourPosts() {
 	}, [Post]);
 
 	return (
-		<Modal className='modal-content-2' show={true} centered>
-			<Modal.Header>
-				<Modal.Title>CodeLeap Network!</Modal.Title>
-			</Modal.Header>
+		<div>
+			<Modal className='modal-content-2' show={true} centered>
+				<Modal.Header>
+					<Modal.Title>CodeLeap Network!</Modal.Title>
+				</Modal.Header>
 
-			<Modal.Body>
-				<Form.Group className='textarea' controlId="formTitle">
-					<Form.Label>Title:</Form.Label>
-					<Form.Control
-						type="text"
-						placeholder="Hello world"
-						value={Title}
-						onChange={handleTitleChange}
-						onKeyPress={handleEnterKey}
-					/>
-					<Form.Label>Content:</Form.Label>
-					<Form.Control
-						type="text"
-						as='textarea'
-						rows={9}
-						placeholder="Content here"
-						value={Post}
-						onChange={handleTextChange}
-					/>
-					{renderButton(Action)}
-				</Form.Group>
-			</Modal.Body>
-			<p className='d-flex justify-content-center text-danger'>{warning}</p>
-			{posts.length > 0 &&  posts.map((p) => {
-				return (<Posts p={p}/>);
-			}) }
-		</Modal>
+				<Modal.Body>
+					<Form.Group className='textarea' controlId="formTitle">
+						<Form.Label>Title:</Form.Label>
+						<Form.Control
+							type="text"
+							placeholder="Hello world"
+							value={Title}
+							onChange={handleTitleChange}
+							onKeyPress={handleEnterKey}
+						/>
+						<Form.Label>Content:</Form.Label>
+						<Form.Control
+							type="text"
+							as='textarea'
+							rows={9}
+							placeholder="Content here"
+							value={Post}
+							onChange={handleTextChange}
+						/>
+						{renderButton(Action)}
+					</Form.Group>
+				</Modal.Body>
+				<p className='d-flex justify-content-center text-danger'>{warning}</p>
+				{posts.length > 0 &&  posts.map((p) => {
+					return (<Posts key={p.postId} p={p}/>);
+				}) }
+			
+			</Modal>
+			
+		</div>
 	);
 }
 

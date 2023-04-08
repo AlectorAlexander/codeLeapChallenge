@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Row, Col, Button, Container } from 'react-bootstrap';
 import '../styles/post.css';
 
 const Posts = ({ p }) => {
 	const username = useSelector(({ userReducer }) => userReducer.name);
  
 	return (
-		<Container>
+		<Container className='card_post'>
 			<Row key={p.postId} className="mb-4">
 				<div className='post_header d-flex flex-row'>
 					<p>
@@ -23,7 +23,7 @@ const Posts = ({ p }) => {
 						</Button>
 					</div>
 				</div>
-				<Col>
+				<Col className='linhas'>
 					<h3>{p.Title}</h3>
 					<p>{p.Post}</p>
 				</Col>

@@ -9,14 +9,14 @@ import YourPosts from './components/YourPosts';
 
 function App() {
 	const username = useSelector(({userReducer}) => userReducer.name);
-
 	
 
  
 	return (
 		<MainPage className='App'>
-			<YourName />
+			{username === '' && <YourName />}
 			{username !== '' ? <YourPosts /> : ''}
+			
 		</MainPage>
 	);
 }

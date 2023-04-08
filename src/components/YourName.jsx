@@ -50,7 +50,7 @@ function YourName() {
 	}, [username]);
 
 	return (
-		<Modal show={show} centered>
+		<Modal className='modal-content-1' show={show} centered>
 			<Modal.Header>
 				<Modal.Title>Welcome to CodeLeap network!</Modal.Title>
 			</Modal.Header>
