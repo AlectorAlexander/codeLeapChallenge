@@ -14,7 +14,7 @@ const userReducer = (state= INITIAL_STATE, action) => {
 	case 'insert_post':
 		return {
 			...state,
-			post: action.post 
+			post: [...state.post, action.post]
 		};
 	case 'edit_post':
 		return {

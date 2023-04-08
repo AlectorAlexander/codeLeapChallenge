@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
-import { insert_name, insert_post } from '../redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { insert_post } from '../redux/actions';
 import '../styles/modal.css';
 import { v4 } from 'uuid';
+import Posts from './Posts';
 
 function YourPosts() {
 	/* const username = useSelector(state => state.name); */
@@ -12,6 +13,13 @@ function YourPosts() {
 	const [warning, setWarning] = useState('');
 	const [Action, setAction] = useState('create');
 	const [isDisabled, setIsDisabled] = useState(true);
+
+	const posts = useSelector(({userReducer}) => userReducer.post);
+
+	useEffect(() => {
+		console.log(posts);
+	}, [posts]);
+
 
 	const dispatch = useDispatch();
 
@@ -121,12 +129,12 @@ function YourPosts() {
 						placeholder="Content here"
 						value={Post}
 						onChange={handleTextChange}
-						onKeyPress={handleEnterKey}
 					/>
 					{renderButton(Action)}
 				</Form.Group>
 			</Modal.Body>
 			<p className='d-flex justify-content-center text-danger'>{warning}</p>
+			{posts.length > 0 && <Posts/>}
 		</Modal>
 	);
 }
