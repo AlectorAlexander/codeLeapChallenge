@@ -1,6 +1,6 @@
 export const insert_name = (name) => ({
 	type: 'insert_name',
-	name
+	name: `@${name}`
 });
 
 export const insert_post = (post) => ({

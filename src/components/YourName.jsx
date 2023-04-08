@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { useDispatch} from 'react-redux';
 import { insert_name } from '../redux/actions';
 import '../styles/modal.css';
 
@@ -18,6 +18,7 @@ function YourName() {
 
 	const handleEnterKey = (event) => {
 		if (event.key === 'Enter' && isDisabled === false) {
+			console.log(name);
 			setShow(false);
 		}
 	};
@@ -60,7 +61,7 @@ function YourName() {
                     @
 					<Form.Control
 						type="text"
-						placeholder="John Lano"
+						placeholder="John_lano"
 						value={username}
 						onChange={handleUsernameChange}
 						onKeyPress={handleEnterKey}

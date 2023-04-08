@@ -1,73 +1,129 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-import { insert_name } from '../redux/actions';
+import { insert_name, insert_post } from '../redux/actions';
 import '../styles/modal.css';
+import { v4 } from 'uuid';
 
-function YourName() {
-	const [username, setUsername] = useState('');
-	const [show, setShow] = useState(true); 
+function YourPosts() {
+	/* const username = useSelector(state => state.name); */
+	const [Title, setTitle] = useState('');
+	const [Post, setPost] = useState('');
 	const [warning, setWarning] = useState('');
+	const [Action, setAction] = useState('create');
 	const [isDisabled, setIsDisabled] = useState(true);
 
 	const dispatch = useDispatch();
 
-	const handleUsernameChange = (event) => {
-		return setUsername(event.target.value);
+	const createPost = () => {
+		const postId = v4();
+		const post = {
+			postId,
+			Title,
+			Post,
+		};
+		dispatch(insert_post(post));
+		setTitle('');
+		setPost('');
+		setWarning('');
 	};
 
 	const handleEnterKey = (event) => {
-		if (event.key === 'Enter' && isDisabled === false) {
-			setShow(false);
+		if(Action === 'create') {
+			if (event.key === 'Enter' && isDisabled === false) {
+				return createPost();
+			}
 		}
 	};
 
-	useEffect(() => {
-		if (!show) {
-			dispatch(insert_name(username));
+	const renderButton = (action) => {
+		if(action === 'create') {
+			return (<Button disabled={isDisabled} className="mt-1 modal-button" variant="primary" onClick={createPost}>
+            Create
+			</Button>);
+		} else if (action === 'edit') {
+			return (
+				<Button disabled={isDisabled} className="mt-1 modal-button" variant="primary" onClick={createPost}>
+            Edit
+				</Button>);
 		}
+	};
 
-	}, [show]);
+	const handleTitleChange = (event) => {
+		return setTitle(event.target.value);
+	};
+
+	const handleTextChange = (event) => {
+		return setPost(event.target.value);
+	};
+
+	
+
 
 	useEffect(() => {
-		if (username.length > 0 && username.length < 4) {
-			setWarning('Username must be at least 4 characters long');
+		const lastTitleValidation = Title.length > 3 && Title.length < 45;
+		const lastPostValidation = Post.length > 3;
+		if (Title.length > 0 && Title.length < 4) {
+			setWarning('Title must be at least 4 characters long');
 			setIsDisabled(true);
-		} else if (username.length > 14) {
-			setIsDisabled(true);
-			setWarning('Username cannot be longer than 14 characters');
-		} else if (username.includes(' ')) {
-			setIsDisabled(true);
-			setWarning('Username cannot have a space');
-		} else if (username === '') {
+		} else if (Title === '') {
 			setIsDisabled(true);
 			setWarning('');
-		} else {
+		} else if (Title.length > 44) {
+			setIsDisabled(true);
+			setWarning('Title cannot be longer than 44 characters');
+		} else if (lastTitleValidation && lastPostValidation) {
 			setIsDisabled(false);
 			setWarning('');
+		}else if (Title.length > 3 && Title.length < 45) {
+			setWarning('');
 		}
-	}, [username]);
+	}, [Title]);
+
+	useEffect(() => {
+		const lastTitleValidation = Title.length > 3 && Title.length < 45;
+		const lastPostValidation = Post.length > 3;
+		if (Post.length > 0 && Post.length < 4) {
+			setWarning('Post must be at least 4 characters long');
+			setIsDisabled(true);
+		} else if (Post === '') {
+			setIsDisabled(true);
+			setWarning('');
+		} else if (lastTitleValidation && lastPostValidation) {
+			setIsDisabled(false);
+			setWarning('');
+		} else if (lastPostValidation) {
+			setWarning('');
+		} 
+	}, [Post]);
 
 	return (
-		<Modal show={show} centered>
+		<Modal className='modal-content-2' show={true} centered>
 			<Modal.Header>
-				<Modal.Title>Welcome to CodeLeap network!</Modal.Title>
+				<Modal.Title>CodeLeap Network!</Modal.Title>
 			</Modal.Header>
 
 			<Modal.Body>
-				<Form.Group controlId="formUsername">
-					<Form.Label>Please enter your username:</Form.Label>
-                    @
+				<Form.Group className='textarea' controlId="formTitle">
+					<Form.Label>Title:</Form.Label>
 					<Form.Control
 						type="text"
-						placeholder="John Lano"
-						value={username}
-						onChange={handleUsernameChange}
+						placeholder="Hello world"
+						value={Title}
+						onChange={handleTitleChange}
 						onKeyPress={handleEnterKey}
 					/>
-					<Button disabled={isDisabled} className="mt-1 modal-button" variant="primary" onClick={() => setShow(false)}>
-            Enter
-					</Button>
+					<Form.Label>Content:</Form.Label>
+					<Form.Control
+						type="text"
+						as='textarea'
+						rows={9}
+						placeholder="Content here"
+						value={Post}
+						onChange={handleTextChange}
+						onKeyPress={handleEnterKey}
+					/>
+					{renderButton(Action)}
 				</Form.Group>
 			</Modal.Body>
 			<p className='d-flex justify-content-center text-danger'>{warning}</p>
@@ -75,4 +131,4 @@ function YourName() {
 	);
 }
 
-export default YourName;
+export default YourPosts;
