@@ -11,10 +11,8 @@ function YourPosts() {
 	const [Title, setTitle] = useState('');
 	const [Post, setPost] = useState('');
 	const [warning, setWarning] = useState('');
-	const [Action, setAction] = useState('create');
 	const [isDisabled, setIsDisabled] = useState(true);
 	const posts = useSelector(({userReducer}) => userReducer.post);
-
 
 
 
@@ -34,25 +32,11 @@ function YourPosts() {
 	};
 
 	const handleEnterKey = (event) => {
-		if(Action === 'create') {
-			if (event.key === 'Enter' && isDisabled === false) {
-				return createPost();
-			}
+		if (event.key === 'Enter' && isDisabled === false) {
+			return createPost();
 		}
 	};
 
-	const renderButton = (action) => {
-		if(action === 'create') {
-			return (<Button disabled={isDisabled} className="mt-1 modal-button" variant="primary" onClick={createPost}>
-            Create
-			</Button>);
-		} else if (action === 'edit') {
-			return (
-				<Button disabled={isDisabled} className="mt-1 modal-button" variant="primary" onClick={createPost}>
-            Edit
-				</Button>);
-		}
-	};
 
 	const handleTitleChange = (event) => {
 		return setTitle(event.target.value);
@@ -103,8 +87,11 @@ function YourPosts() {
 	}, [Post]);
 
 	return (
-		<div>
-			<Modal className='modal-content-2' show={true} centered>
+		<div id="modal-top"
+			
+		>
+			<Modal
+				className='modal-content-2' show={true} centered>
 				<Modal.Header>
 					<Modal.Title>CodeLeap Network!</Modal.Title>
 				</Modal.Header>
@@ -128,14 +115,16 @@ function YourPosts() {
 							value={Post}
 							onChange={handleTextChange}
 						/>
-						{renderButton(Action)}
 					</Form.Group>
+					<Button disabled={isDisabled} className="mt-1 modal-button" variant="primary" onClick={createPost}>
+            Create
+					</Button>
 				</Modal.Body>
 				<p className='d-flex justify-content-center text-danger'>{warning}</p>
 				{posts.length > 0 &&  posts.map((p) => {
 					return (<Posts key={p.postId} p={p}/>);
 				}) }
-			
+				
 			</Modal>
 			
 		</div>

@@ -38,12 +38,15 @@
     color:antiquewhite;
     background-image: linear-gradient(to right, #6d7cb3, #4d91b6, #0e77a6);
 }
-
+.modal-body button:disabled {
+    background-image: linear-gradient(to right, #3a3d48, #454a4c);
+    border: 1px solid rgb(93, 91, 91);
+    color: gray;
+}
 
 .modal-body button {
     background-image: linear-gradient(to right, #6d7cb3, #375562);
     color: white;
-    border: 1px solid rgba(93, 91, 91, 0.26);
   }
   
   .modal-body button:hover {
@@ -51,6 +54,7 @@
     font-weight: bolder;
     color: white;
     transition: all 0.2s ease;
+    border: 1px solid rgba(93, 91, 91, 0.26);
   }
   
   

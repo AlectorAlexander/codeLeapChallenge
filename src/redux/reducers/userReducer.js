@@ -20,7 +20,7 @@ const userReducer = (state= INITIAL_STATE, action) => {
 		return {
 			...state,
 			post: state.post.map((p) => {
-				if (p.id === action.post.id) {
+				if (p.postId === action.post.postId) {
 					return action.post;
 				} else {
 					return p;
@@ -31,7 +31,7 @@ const userReducer = (state= INITIAL_STATE, action) => {
 		return {
 			...state,
 			post: state.post.filter((p) => {
-				return p.id !== action.id;
+				return p.postId !== action.postId;
 			})
 		};
 	default:

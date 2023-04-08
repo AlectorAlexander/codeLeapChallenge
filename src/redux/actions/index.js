@@ -13,7 +13,7 @@ export const edit_post = (post) => ({
 	post
 });
 
-export const delete_post = (id) => ({
+export const delete_post = (postId) => ({
 	type: 'delete_post',
-	id
+	postId
 });

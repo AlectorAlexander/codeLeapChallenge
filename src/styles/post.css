@@ -36,3 +36,13 @@
     text-align: center;
     padding-top: 10px;
 }
+
+.title, .postEdit {
+    text-align: center;
+    font-weight: 900;
+    color : white
+}
+
+.postEdit {
+    margin-top: 20px;
+}

@@ -16,7 +16,6 @@ function App() {
 		<MainPage className='App'>
 			{username === '' && <YourName />}
 			{username !== '' ? <YourPosts /> : ''}
-			
 		</MainPage>
 	);
 }
