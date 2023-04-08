@@ -134,7 +134,9 @@ function YourPosts() {
 				</Form.Group>
 			</Modal.Body>
 			<p className='d-flex justify-content-center text-danger'>{warning}</p>
-			{posts.length > 0 && <Posts/>}
+			{posts.length > 0 &&  posts.map((p) => {
+				return (<Posts p={p}/>);
+			}) }
 		</Modal>
 	);
 }

@@ -1,29 +1,43 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
+import '../styles/post.css';
 
-const Posts = () => {
-	const posts = useSelector(({userReducer}) => userReducer.post);
-	const username = useSelector(({userReducer}) => userReducer.name);
-
-
+const Posts = ({ p }) => {
+	const username = useSelector(({ userReducer }) => userReducer.name);
+ 
 	return (
 		<Container>
-			{posts.map(p => (
-				<Row key={p.postId} className="mb-4">
-					<Col>
-						<div>
-							<p>
-								{username}
-							</p>
-						</div>
-						<h3>{p.Title}</h3>
-						<p>{p.Post}</p>
-					</Col>
-				</Row>
-			))}
+			<Row key={p.postId} className="mb-4">
+				<div className='post_header d-flex flex-row'>
+					<p>
+						{username}
+					</p>
+					<div className='button_posts d-flex flex-row'>
+						<Button variant='danger'>
+              Deletar
+						</Button>
+						<Button>
+              Editar
+						</Button>
+					</div>
+				</div>
+				<Col>
+					<h3>{p.Title}</h3>
+					<p>{p.Post}</p>
+				</Col>
+			</Row>
 		</Container>
 	);
+};
+
+Posts.propTypes = {
+	p: PropTypes.shape({
+		postId: PropTypes.number.isRequired,
+		Title: PropTypes.string.isRequired,
+		Post: PropTypes.string.isRequired,
+	}).isRequired,
 };
 
 export default Posts;
