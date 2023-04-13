@@ -1,19 +1,19 @@
-export const insert_name = (name) => ({
+export const insert_name = (username) => ({
 	type: 'insert_name',
-	name: `@${name}`
+	username: `@${username}`
 });
 
-export const insert_post = (post) => ({
+export const insert_post = (posts) => ({
 	type: 'insert_post',
-	post
+	posts
 });
 
-export const edit_post = (post) => ({
+export const edit_post = (posts) => ({
 	type: 'edit_post',
-	post
+	posts
 });
 
-export const delete_post = (postId) => ({
+export const delete_post = (id) => ({
 	type: 'delete_post',
-	postId
+	id
 });

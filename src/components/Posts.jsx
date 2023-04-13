@@ -1,75 +1,78 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Row, Col, Button, Container, Form } from 'react-bootstrap';
 import '../styles/post.css';
 import { delete_post, edit_post } from '../redux/actions';
 import moment from 'moment';
 import DeleteModal from './DeletePost';
+import { deletePosts, editPosts } from '../services/BDrequests';
 
 const Posts = ({ p }) => {
 	const [edit, setEdit] = useState(false);
 	const [ShowDelete, setShowDelete] = useState(false);
-	const [Title, setTitle] = useState('');
+	const [title, setTitle] = useState('');
 	const [warning, setWarning] = useState('');
 	const [isDisabled, setIsDisabled] = useState(true);
-	const [Post, setPost] = useState('');
-	const username = useSelector(({ userReducer }) => userReducer.name);
+	const [content, setPost] = useState('');
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		setTitle(p.Title);
-		setPost(p.Post);
+		setTitle(p.title);
+		setPost(p.content);
 	}, []);
 
 	function getTimeAgo() {
-		const date = new Date();
+		const date = p.created_datetime;
 		const timeAgo = moment(date).fromNow();
 		return timeAgo;
 	}
 
-	function editPost() {
-		const post = {
-			Title,
-			Post,
-			postId: p.postId,
+	async function editPost() {
+		const body = {
+			title,
+			content,
 		};
+		const post = await editPosts(p.id, body) || {title, content, id: p.id};
+		
 		dispatch(edit_post(post));
 		setEdit(false);
 	}
 
-	const deletePost = () => {
-		dispatch(delete_post(p.postId ));
+	const deletePost = async () => {
+		await deletePosts(p.id);
+		dispatch(delete_post(p.id));
 		setEdit(false);
+
 	};
 
 	useEffect(() => {
-		const lastTitleValidation = Title.length > 3 && Title.length < 45;
-		const lastPostValidation = Post.length > 3;
-		if (Title.length > 0 && Title.length < 4) {
+		const lastTitleValidation = title.length > 3 && title.length < 45;
+		const lastPostValidation = content.length > 3;
+		if (title.length > 0 && title.length < 4) {
 			setWarning('Title must be at least 4 characters long');
 			setIsDisabled(true);
-		} else if (Title === '') {
+		} else if (title === '') {
 			setIsDisabled(true);
 			setWarning('');
-		} else if (Title.length > 44) {
+		} else if (title.length > 44) {
 			setIsDisabled(true);
 			setWarning('Title cannot be longer than 44 characters');
 		} else if (lastTitleValidation && lastPostValidation) {
 			setIsDisabled(false);
 			setWarning('');
-		}else if (Title.length > 3 && Title.length < 45) {
+		}else if (title.length > 3 && title.length < 45) {
 			setWarning('');
 		}
-	}, [Title]);
+	}, [title]);
 
 	useEffect(() => {
-		const lastTitleValidation = Title.length > 3 && Title.length < 45;
-		const lastPostValidation = Post.length > 3;
-		if (Post.length > 0 && Post.length < 4) {
+		const lastTitleValidation = title.length > 3 && title.length < 45;
+		const lastPostValidation = content.length > 3;
+		if (content.length > 0 && content.length < 4) {
 			setWarning('Post must be at least 4 characters long');
 			setIsDisabled(true);
-		} else if (Post === '') {
+		} else if (content === '') {
 			setIsDisabled(true);
 			setWarning('');
 		} else if (lastTitleValidation && lastPostValidation) {
@@ -78,7 +81,7 @@ const Posts = ({ p }) => {
 		} else if (lastPostValidation) {
 			setWarning('');
 		} 
-	}, [Post]);
+	}, [content]);
 
 	const renderFormOrContainerRows = () => {
 		return edit ? (
@@ -100,7 +103,7 @@ const Posts = ({ p }) => {
 				<Form.Control
 					type="text"
 					placeholder="Hello world"
-					value={Title}
+					value={title}
 					onChange={({target}) => setTitle(target.value) }
 				/>
 				<Form.Label>Content:</Form.Label>
@@ -109,7 +112,7 @@ const Posts = ({ p }) => {
 					as='textarea'
 					rows={9}
 					placeholder="Content here"
-					value={Post}
+					value={content}
 					onChange={({target}) => setPost(target.value) }
 				/>
 				
@@ -118,11 +121,11 @@ const Posts = ({ p }) => {
 		) : (
 			<Container className='card_post'>
 				<DeleteModal show={ShowDelete} setShow={setShowDelete} deletePost={deletePost} />
-				<Row key={p.postId} className="mb-4">
+				<Row key={p.id} className="mb-4">
 					<div className='post_header d-flex flex-row'>
 						<div>
 							<p>
-								{username}
+								{p.username}
 							</p>
 							<small>Posted {getTimeAgo()}</small>
 						</div>
@@ -139,8 +142,8 @@ const Posts = ({ p }) => {
 					</div>
 
 					<Col className='linhas'>
-						<h3>{p.Title}</h3>
-						<div className='mb-5' style={{ whiteSpace: 'pre-wrap' }}>{p.Post}</div>
+						<h3>{p.title}</h3>
+						<div className='mb-5' style={{ whiteSpace: 'pre-wrap' }}>{p.content}</div>
 					</Col>
 				</Row>
 
@@ -157,9 +160,11 @@ const Posts = ({ p }) => {
 
 Posts.propTypes = {
 	p: PropTypes.shape({
-		postId: PropTypes.number.isRequired,
-		Title: PropTypes.string.isRequired,
-		Post: PropTypes.string.isRequired,
+		id: PropTypes.number.isRequired,
+		title: PropTypes.string.isRequired,
+		username: PropTypes.string.isRequired,
+		created_datetime: PropTypes.string.isRequired,
+		content: PropTypes.string.isRequired,
 	}).isRequired,
 };
 

@@ -1,7 +1,7 @@
 
 const INITIAL_STATE = {
-	name: '',
-	post: []
+	username: '',
+	posts: []
 };
 
 const userReducer = (state= INITIAL_STATE, action) => {
@@ -9,19 +9,19 @@ const userReducer = (state= INITIAL_STATE, action) => {
 	case 'insert_name':
 		return {
 			...state,
-			name: action.name 
+			username: action.username 
 		};
 	case 'insert_post':
 		return {
 			...state,
-			post: [...state.post, action.post]
+			posts: [...state.posts, action.posts]
 		};
 	case 'edit_post':
 		return {
 			...state,
-			post: state.post.map((p) => {
-				if (p.postId === action.post.postId) {
-					return action.post;
+			posts: state.posts.map((p) => {
+				if (p.id === action.posts.id) {
+					return action.posts;
 				} else {
 					return p;
 				}
@@ -30,8 +30,8 @@ const userReducer = (state= INITIAL_STATE, action) => {
 	case 'delete_post':
 		return {
 			...state,
-			post: state.post.filter((p) => {
-				return p.postId !== action.postId;
+			posts: state.posts.filter((p) => {
+				return p.id !== action.id;
 			})
 		};
 	default:

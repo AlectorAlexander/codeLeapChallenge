@@ -3,28 +3,31 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { insert_post } from '../redux/actions';
 import '../styles/modal.css';
-import { v4 } from 'uuid';
 import Posts from './Posts';
+import { createPosts } from '../services/BDrequests';
 
 function YourPosts() {
 	/* const username = useSelector(state => state.name); */
-	const [Title, setTitle] = useState('');
-	const [Post, setPost] = useState('');
+	const [title, setTitle] = useState('');
+	const [content, setPost] = useState('');
 	const [warning, setWarning] = useState('');
 	const [isDisabled, setIsDisabled] = useState(true);
-	const posts = useSelector(({userReducer}) => userReducer.post);
+	const posts = useSelector(({userReducer}) => userReducer.posts);
+	const username = useSelector(({userReducer}) => userReducer.username);
+
 
 
 
 	const dispatch = useDispatch();
 
-	const createPost = () => {
-		const postId = v4();
-		const post = {
-			postId,
-			Title,
-			Post,
+	const createPost = async () => {
+
+		const body = {
+			title,
+			content,
+			username,
 		};
+		const post = await createPosts(body);
 		dispatch(insert_post(post));
 		setTitle('');
 		setPost('');
@@ -50,32 +53,32 @@ function YourPosts() {
 
 
 	useEffect(() => {
-		const lastTitleValidation = Title.length > 3 && Title.length < 45;
-		const lastPostValidation = Post.length > 3;
-		if (Title.length > 0 && Title.length < 4) {
+		const lastTitleValidation = title.length > 3 && title.length < 45;
+		const lastPostValidation = content.length > 3;
+		if (title.length > 0 && title.length < 4) {
 			setWarning('Title must be at least 4 characters long');
 			setIsDisabled(true);
-		} else if (Title === '') {
+		} else if (title === '') {
 			setIsDisabled(true);
 			setWarning('');
-		} else if (Title.length > 44) {
+		} else if (title.length > 44) {
 			setIsDisabled(true);
 			setWarning('Title cannot be longer than 44 characters');
 		} else if (lastTitleValidation && lastPostValidation) {
 			setIsDisabled(false);
 			setWarning('');
-		}else if (Title.length > 3 && Title.length < 45) {
+		}else if (title.length > 3 && title.length < 45) {
 			setWarning('');
 		}
-	}, [Title]);
+	}, [title]);
 
 	useEffect(() => {
-		const lastTitleValidation = Title.length > 3 && Title.length < 45;
-		const lastPostValidation = Post.length > 3;
-		if (Post.length > 0 && Post.length < 4) {
+		const lastTitleValidation = title.length > 3 && title.length < 45;
+		const lastPostValidation = content.length > 3;
+		if (content.length > 0 && content.length < 4) {
 			setWarning('Post must be at least 4 characters long');
 			setIsDisabled(true);
-		} else if (Post === '') {
+		} else if (content === '') {
 			setIsDisabled(true);
 			setWarning('');
 		} else if (lastTitleValidation && lastPostValidation) {
@@ -84,7 +87,7 @@ function YourPosts() {
 		} else if (lastPostValidation) {
 			setWarning('');
 		} 
-	}, [Post]);
+	}, [content]);
 
 	return (
 		<div id="modal-top"
@@ -102,7 +105,7 @@ function YourPosts() {
 						<Form.Control
 							type="text"
 							placeholder="Hello world"
-							value={Title}
+							value={title}
 							onChange={handleTitleChange}
 							onKeyPress={handleEnterKey}
 						/>
@@ -112,7 +115,7 @@ function YourPosts() {
 							as='textarea'
 							rows={9}
 							placeholder="Content here"
-							value={Post}
+							value={content}
 							onChange={handleTextChange}
 						/>
 					</Form.Group>
@@ -122,7 +125,7 @@ function YourPosts() {
 				</Modal.Body>
 				<p className='d-flex justify-content-center text-danger'>{warning}</p>
 				{posts.length > 0 &&  posts.map((p) => {
-					return (<Posts key={p.postId} p={p}/>);
+					return (<Posts key={p.id} p={p}/>);
 				}) }
 				
 			</Modal>

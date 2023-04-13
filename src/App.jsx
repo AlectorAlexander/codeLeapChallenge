@@ -8,7 +8,7 @@ import YourPosts from './components/YourPosts';
 
 
 function App() {
-	const username = useSelector(({userReducer}) => userReducer.name);
+	const username = useSelector(({userReducer}) => userReducer.username);
 	
 
  

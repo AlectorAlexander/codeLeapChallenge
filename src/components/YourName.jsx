@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useDispatch} from 'react-redux';
-import { insert_name } from '../redux/actions';
+import { insert_name, insert_post } from '../redux/actions';
 import '../styles/modal.css';
+import { getPosts } from '../services/BDrequests';
 
 function YourName() {
 	const [username, setUsername] = useState('');
@@ -11,6 +12,15 @@ function YourName() {
 	const [isDisabled, setIsDisabled] = useState(true);
 
 	const dispatch = useDispatch();
+
+	useEffect(() => {
+		return async () => {
+			const { results } = await getPosts();
+			results.forEach((post) => {
+				dispatch(insert_post(post));
+			});
+		};
+	}, []);
 
 	const handleUsernameChange = (event) => {
 		return setUsername(event.target.value);
